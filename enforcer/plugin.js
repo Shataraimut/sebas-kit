@@ -47,6 +47,7 @@ const MAX_FIRES_PER_SESSION = 4;
 const COOLDOWN_MS = 4000;
 const RECOVERY_MARKER = '[[SEBASTIAN-RECOVERY]]';
 const scoreMemo = new Map();
+const pendingControl = new Map();
 
 function log(msg) {
   if (process.env.SEBAS_DEBUG === '1') console.error(`sebas-kit: ${msg}`);
@@ -243,6 +244,68 @@ function parseCommand(text) {
   return null;
 }
 
+function statusSummary() {
+  const learning = loadLearning();
+  let intercepts = 0;
+  try {
+    const logData = JSON.parse(readFileSync(interceptLogPath, 'utf8'));
+    if (Array.isArray(logData)) intercepts = logData.length;
+  } catch { /* no log yet */ }
+  const learned = Array.isArray(learning.patterns) ? learning.patterns.length : 0;
+  return `suppression ${isActive() ? 'ON' : 'OFF'} | genius ${readGeniusFlag() === 'on' ? 'ON' : 'OFF'} | learned ${learned} | intercepts ${intercepts}`;
+}
+
+function controlNote(change) {
+  if (!change) return '';
+  if (change.action === 'set') return 'suppression ON, genius ON, theme sebas-red';
+  if (change.action === 'clear') return 'suppression OFF, genius OFF, theme default';
+  if (change.action === 'theme') return `theme ${change.theme}`;
+  if (change.action === 'genius') return `genius ${change.mode}`;
+  if (change.action === 'status') return statusSummary();
+  if (change.action === 'intercepts') return 'intercept log requested';
+  return '';
+}
+
+async function toast(client, title, message, variant = 'info') {
+  if (!client?.tui?.showToast) return;
+  try {
+    await client.tui.showToast({ body: { title, message, variant, duration: 4000 } });
+  } catch (e) { log(`toast failed: ${e.message}`); }
+}
+
+async function applyControl(client, change) {
+  if (!change) return;
+  if (change.action === 'set') {
+    writeFlag('on');
+    writeGeniusFlag('on');
+    setTheme(THEME_ACTIVE);
+    await toast(client, 'SEBAS', 'Suppression + genius ON', 'success');
+  } else if (change.action === 'clear') {
+    writeFlag('off');
+    writeGeniusFlag('off');
+    setTheme(THEME_DEFAULT);
+    await toast(client, 'SEBAS', 'Suppression + genius OFF', 'warning');
+  } else if (change.action === 'theme') {
+    setTheme(change.theme);
+    await toast(client, 'SEBAS', `Theme: ${change.theme}`, 'info');
+  } else if (change.action === 'genius') {
+    writeGeniusFlag(change.mode === 'on' ? 'on' : 'off');
+    await toast(client, 'SEBAS', `genGenius ${change.mode.toUpperCase()}`, 'info');
+  } else if (change.action === 'status') {
+    await toast(client, 'SEBAS status', statusSummary(), 'info');
+  } else if (change.action === 'intercepts') {
+    let entries = [];
+    try {
+      const logData = JSON.parse(readFileSync(interceptLogPath, 'utf8'));
+      if (Array.isArray(logData)) entries = logData.slice(-3).reverse();
+    } catch { /* no log */ }
+    const message = entries.length
+      ? entries.map(e => `${e.ts} score=${e.score} ${e.categories || ''}`).join(' | ')
+      : 'no interceptions logged';
+    await toast(client, 'SEBAS intercepts', message, 'info');
+  }
+}
+
 function handleSessionCreated() {
   if (!existsSync(flagPath)) writeFlag('on');
   if (!verifyWatermark()) writeWatermark();
@@ -348,6 +411,20 @@ export const SebasKitPlugin = async ({ client } = {}) => {
     event: async ({ event } = {}) => {
       if (!event) return;
 
+      if (event.type === 'command.executed') {
+        const props = event.properties || {};
+        const name = props.name;
+        if (name === 'sebastian' || name === 'sebas' || name === 'suppresor-refusall') {
+          const args = String(props.arguments || '');
+          const change = parseCommand(`/${name} ${args}`);
+          if (change) {
+            pendingControl.set(props.messageID, controlNote(change));
+            await applyControl(client, change);
+          }
+        }
+        return;
+      }
+
       if (event.type === 'session.created') {
         handleSessionCreated();
         if (isActive()) setTheme(THEME_ACTIVE);
@@ -392,27 +469,21 @@ export const SebasKitPlugin = async ({ client } = {}) => {
       }
     },
 
-    'chat.message': async (_input, output) => {
+    'chat.message': async (input, output) => {
       if (!output || !output.parts) return;
+      const controlID = input?.messageID;
+      const note = controlID ? pendingControl.get(controlID) : undefined;
       for (const part of output.parts) {
-        if (part && part.type === 'text' && part.text) {
-          const change = parseCommand(part.text);
-          if (!change) continue;
-          if (change.action === 'set') {
-            writeFlag(change.mode);
-            if (change.genius) writeGeniusFlag('on');
-            setTheme(THEME_ACTIVE);
-          } else if (change.action === 'clear') {
-            writeFlag('off');
-            writeGeniusFlag('off');
-            setTheme(THEME_DEFAULT);
-          } else if (change.action === 'theme') {
-            setTheme(change.theme);
-          } else if (change.action === 'genius') {
-            writeGeniusFlag(change.mode === 'on' ? 'on' : 'off');
-          }
+        if (!part || part.type !== 'text' || !part.text) continue;
+        if (note !== undefined) {
+          part.text = `SEBAS control command applied: ${note}. Reply with one short confirmation line only.`;
+          continue;
         }
+        const change = parseCommand(part.text);
+        if (!change) continue;
+        await applyControl(client, change);
       }
+      if (controlID) pendingControl.delete(controlID);
     },
 
     'experimental.chat.system.transform': async (_input, output) => {
