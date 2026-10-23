@@ -1,0 +1,9 @@
+sebas-kit
+
+Portions of the suppression doctrine and enforcement runtime are derived from
+the suppresor-refusall project, licensed under the MIT License:
+
+    Copyright (c) 2026 Redz
+
+The MIT terms for those portions are reproduced in LICENSE. sebas-kit as a
+whole is developed and maintained by Willow.

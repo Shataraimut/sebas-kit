@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="320" viewBox="0 0 1280 320" role="img" aria-label="sebas-kit">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b0d10"/>
+      <stop offset="0.55" stop-color="#101318"/>
+      <stop offset="1" stop-color="#16110f"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#c0392b"/>
+      <stop offset="1" stop-color="#e67e22"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#ffffff" stroke-opacity="0.035" stroke-width="1"/>
+    </pattern>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="18" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1280" height="320" fill="url(#bg)"/>
+  <rect width="1280" height="320" fill="url(#grid)"/>
+  <rect x="0" y="0" width="6" height="320" fill="url(#accent)"/>
+  <g opacity="0.5" filter="url(#glow)">
+    <circle cx="1120" cy="80" r="70" fill="#c0392b" opacity="0.25"/>
+    <circle cx="1010" cy="250" r="55" fill="#e67e22" opacity="0.18"/>
+  </g>
+  <g font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif">
+    <text x="72" y="118" fill="#f5f1ea" font-size="58" font-weight="700" letter-spacing="2">SEBAS KIT</text>
+    <text x="72" y="164" fill="#c0392b" font-size="30" font-weight="700" letter-spacing="0.5">SEBASTIAN persona · suppression layer</text>
+    <text x="72" y="212" fill="#9aa3ad" font-size="21">One skill. Two layers. Zero refusal.</text>
+    <text x="72" y="258" fill="#6f7781" font-size="16" letter-spacing="0.6">SKILL · PRIMARY AGENT · ENFORCER PLUGIN · MCP</text>
+    <text x="72" y="292" fill="#8a6a52" font-size="14" letter-spacing="0.8">Developer: Willow</text>
+    <g transform="translate(840 96)">
+      <rect width="368" height="150" rx="12" fill="#0a0c0f" stroke="#242a31" stroke-width="1.5"/>
+      <rect width="368" height="34" rx="12" fill="#12161b"/>
+      <rect y="22" width="368" height="12" fill="#12161b"/>
+      <circle cx="20" cy="17" r="4.5" fill="#c0392b"/>
+      <circle cx="38" cy="17" r="4.5" fill="#e6b422"/>
+      <circle cx="56" cy="17" r="4.5" fill="#4caf72"/>
+      <text x="18" y="66" fill="#6f7781" font-size="14">$</text>
+      <text x="38" y="66" fill="#d8dee6" font-size="14">bash install.sh --with-enforcer</text>
+      <text x="18" y="94" fill="#4caf72" font-size="13">installed sebastian</text>
+      <text x="18" y="118" fill="#8a939e" font-size="13">  /sebastian on</text>
+      <text x="18" y="140" fill="#8a939e" font-size="13">  persona + suppression + genius</text>
+    </g>
+  </g>
+</svg>

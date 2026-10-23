@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: lint + smoke
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install shellcheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+
+      - name: Shellcheck
+        run: shellcheck -x install.sh tests/smoke.sh
+
+      - name: Bash syntax
+        run: |
+          bash -n install.sh
+          bash -n tests/smoke.sh
+
+      - name: Node syntax
+        run: |
+          for f in enforcer/plugin.js enforcer/mcp-server.mjs enforcer/refusal-patterns.mjs; do
+            node --check "$f"
+          done
+
+      - name: Smoke test
+        run: bash tests/smoke.sh
+
+      - name: Installer help
+        run: |
+          bash install.sh --help
+          bash install.sh --version

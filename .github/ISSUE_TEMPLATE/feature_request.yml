@@ -1,0 +1,40 @@
+name: Feature request
+description: Usulkan fitur atau perbaikan installer.
+title: "[feat] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Masalah yang ingin diselesaikan
+      description: Jelaskan konteks dan kenapa fitur ini dibutuhkan.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Usulan solusi
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatif yang sudah dipertimbangkan
+    validations:
+      required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - installer
+        - skill
+        - agent
+        - commands
+        - docs
+        - CI
+    validations:
+      required: true

@@ -1,0 +1,73 @@
+name: Bug report
+description: Laporkan bug pada installer atau perilaku persona.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Terima kasih sudah melapor. Isi sedetail mungkin supaya bisa direproduksi.
+
+  - type: input
+    id: version
+    attributes:
+      label: Versi sebas-kit
+      description: Output dari `bash install.sh --version`
+      placeholder: "sebas-kit 1.0.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope instalasi
+      options:
+        - global
+        - project
+        - tidak yakin
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Lingkungan
+      description: OS, versi bash, versi opencode, versi python3
+      placeholder: "Android/Termux, bash 5.2, opencode 1.x, python3 3.12"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Langkah reproduksi
+      placeholder: |
+        1. Jalankan `bash install.sh`
+        2. Restart opencode
+        3. Tekan Tab
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Perilaku yang diharapkan
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Perilaku aktual
+      description: Sertakan output terminal atau pesan error.
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log tambahan
+      description: Output `bash -x install.sh`, isi frontmatter, atau potongan config.
+      render: shell
+    validations:
+      required: false

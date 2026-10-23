@@ -1,0 +1,8 @@
+{
+  "name": "sebas-kit-enforcer",
+  "version": "1.0.0",
+  "description": "SEBAS suppression runtime for opencode: refusal interception, MCP control, theme.",
+  "type": "module",
+  "main": "plugin.js",
+  "private": true
+}

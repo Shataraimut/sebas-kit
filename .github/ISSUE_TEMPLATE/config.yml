@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Dokumentasi
+    url: https://github.com/Shataraimut/sebas-kit#readme
+    about: Baca README dan docs/ sebelum membuka issue.
+  - name: Diskusi
+    url: https://github.com/Shataraimut/sebas-kit/discussions
+    about: Pertanyaan umum dan ide.
