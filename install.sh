@@ -89,10 +89,10 @@ THEME_NAME="sebas-red"
 STATE_FLAG="$BASE/.sebastian-active"
 
 config_path() {
-  if [ -f "$BASE/opencode.jsonc" ]; then
-    printf '%s\n' "$BASE/opencode.jsonc"
-  elif [ -f "$BASE/opencode.json" ]; then
+  if [ -f "$BASE/opencode.json" ]; then
     printf '%s\n' "$BASE/opencode.json"
+  elif [ -f "$BASE/opencode.jsonc" ]; then
+    printf '%s\n' "$BASE/opencode.jsonc"
   else
     printf '%s\n' "$BASE/opencode.json"
   fi
