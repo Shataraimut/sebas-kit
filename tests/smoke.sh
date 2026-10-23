@@ -109,7 +109,7 @@ PY
 pass "uninstall"
 
 printf '\n== help + version ==\n'
-bash "$ROOT/install.sh" --version | grep -q '^sebas-kit 1\.0\.0$' || fail "version"
+bash "$ROOT/install.sh" --version | grep -q '^sebas-kit 1\.1\.0$' || fail "version"
 bash "$ROOT/install.sh" --help | grep -q -- '--with-enforcer' || fail "help"
 pass "cli surface"
 

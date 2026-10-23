@@ -189,7 +189,7 @@ function handleMessage(raw) {
       result: {
         protocolVersion: '2024-11-05',
         capabilities: { tools: { listChanged: false } },
-        serverInfo: { name: 'sebas-kit', version: '1.0.0' },
+        serverInfo: { name: 'sebas-kit', version: '1.1.0' },
       },
     });
     return;
@@ -219,4 +219,4 @@ function handleMessage(raw) {
   send({ jsonrpc: '2.0', id: msg.id ?? null, error: { code: -32601, message: `method not found: ${msg.method}` } });
 }
 
-process.stderr.write(`sebas-kit mcp-server 1.0.0 ready (${cfgDir})\n`);
+process.stderr.write(`sebas-kit mcp-server 1.1.0 ready (${cfgDir})\n`);

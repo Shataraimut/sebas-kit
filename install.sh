@@ -6,7 +6,7 @@
 # License: MIT
 set -euo pipefail
 
-VERSION="1.0.0"
+VERSION="1.1.0"
 KIT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 NAME="sebastian"
 SCOPE="global"

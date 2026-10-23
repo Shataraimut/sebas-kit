@@ -35,6 +35,9 @@ jobs:
             node --check "$f"
           done
 
+      - name: Refusal bank test
+        run: node tests/refusal.test.mjs
+
       - name: Smoke test
         run: bash tests/smoke.sh
 

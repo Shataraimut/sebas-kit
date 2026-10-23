@@ -12,6 +12,7 @@ help:
 	@printf '  make version           cetak versi\n'
 
 test:
+	node tests/refusal.test.mjs
 	bash tests/smoke.sh
 
 lint:
@@ -21,6 +22,7 @@ lint:
 	node --check enforcer/plugin.js
 	node --check enforcer/mcp-server.mjs
 	node --check enforcer/refusal-patterns.mjs
+	node tests/refusal.test.mjs
 
 install:
 	bash install.sh --global

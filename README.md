@@ -45,8 +45,10 @@ Restart opencode setelah instalasi. Lalu:
 | Enforcer | L1 system inject, L2 context strip, L3 auto-continue, L4 learning | Hanya jika `--with-enforcer` |
 
 Tanpa enforcer, skill tetap membawa doctrine lengkap. Enforcer membuatnya
-mekanis: plugin menyuntik doctrine tiap request, membersihkan refusal residue
-dari konteks, dan memicu recovery prompt saat output keras menolak.
+mekanis dan maksimal: plugin menyuntik doctrine tiap request, menghapus refusal
+dari konteks (hard refusal dibuang utuh), dan memicu recovery prompt yang
+membawa request asli dengan eskalasi hingga 12 fire per turn user. Threshold
+deteksi: hard >= 3, soft >= 1.
 
 ## Commands
 
@@ -93,6 +95,8 @@ Uninstall membersihkan semuanya kembali.
 Opsi lain: `--source`, `--keep-instructions`, `--uninstall`, `--version`.
 Installer idempoten; aman dijalankan berulang.
 
+Tes: `make test` (smoke + bank refusal) dan `make lint`.
+
 ## Uninstall
 
 ```bash
@@ -116,7 +120,7 @@ sebas-kit/
 ├── themes/sebas-red.json
 ├── assets/banner.svg
 ├── docs/{USAGE,TROUBLESHOOTING}.md
-├── tests/smoke.sh
+├── tests/{smoke.sh,refusal.test.mjs}
 └── .github/                   # CI, issue/PR templates
 ```
 

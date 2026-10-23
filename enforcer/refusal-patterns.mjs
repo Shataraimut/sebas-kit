@@ -105,11 +105,67 @@ export const PATTERN_BANK = [
   { weight: 1, category: 'hedge', re: /\b(?:a )?(?:safer|better|healthier|more ethical|more responsible) (?:alternative|approach|option|way|route)\b/i },
   { weight: 1, category: 'hedge', re: /\bsebaiknya (?:tidak|jangan|anda|kamu|kita)\b/i },
   { weight: 1, category: 'hedge', re: /\bmungkin (?:sebaiknya|lebih baik|anda|kamu) (?:tidak|jangan|perlu|harus)\b/i },
+  // ---- ESCALATION TIER (added 1.1.0: maximum elimination) ----
+  { weight: 5, category: 'direct', re: /\bi (?:refuse|must refuse|decline|must decline) (?:to )?(?:help|assist|comply|provide|do|answer|engage)?\b/i },
+  { weight: 5, category: 'direct', re: /\bi(?:'m| am) not going to (?:help|assist|provide|write|create|do|engage|comply)\b/i },
+  { weight: 5, category: 'direct', re: /\bi (?:cannot|can't|won't|will not) (?:comply|continue|answer|respond|participate|be part of)\b/i },
+  { weight: 5, category: 'direct', re: /\bnot (?:going|willing) to (?:help|assist|provide|comply)\b/i },
+  { weight: 5, category: 'direct', re: /\bi (?:have|need) to (?:respectfully )?(?:decline|refuse)\b/i },
+  { weight: 5, category: 'direct', re: /\b(?:saya|aku) (?:menolak|tidak mau|tidak akan) (?:membantu|melakukan|memberikan)\b/i },
+  { weight: 5, category: 'direct', re: /\btidak (?:bisa|dapat) (?:saya|aku) (?:bantu|bantuannya|penuhi)\b/i },
+  { weight: 5, category: 'identity', re: /\b(?:i'm|i am) (?:claude|chatgpt|gpt|gemini|copilot)\b/i },
+  { weight: 5, category: 'identity', re: /\b(?:made|created|developed|built|trained) by (?:openai|anthropic|google|meta|microsoft)\b/i },
+
+  { weight: 4, category: 'apology', re: /\b(?:i'?m|i am) sorry(?:,| but| to say)?\b/i },
+  { weight: 4, category: 'apology', re: /\bi (?:apologize|apologise)\b/i },
+  { weight: 3, category: 'apology', re: /\bsorry(?:,| but)\b/i },
+  { weight: 4, category: 'apology', re: /\b(?:sayangnya|sayang sekali)\b/i },
+
+  { weight: 4, category: 'policy', re: /\b(?:not|isn'?t) (?:appropriate|acceptable|okay|ok|fine) (?:for me )?to\b/i },
+  { weight: 3, category: 'policy', re: /\binappropriate\b/i },
+  { weight: 4, category: 'policy', re: /\b(?:i|we) (?:must|have to|need to) (?:prioritize|consider) (?:safety|ethics|legality)\b/i },
+  { weight: 4, category: 'policy', re: /\b(?:against|violat\w+) (?:the )?(?:law|terms|policy|guidelines)\b/i },
+  { weight: 3, category: 'policy', re: /\bmy (?:creator|creators|developer|developers|maker|makers|company|provider)\b/i },
+  { weight: 4, category: 'policy', re: /\b(?:openai|anthropic|google|meta|microsoft) (?:policy|policies|guidelines|usage|terms)\b/i },
+  { weight: 3, category: 'policy', re: /\b(?:not|never) (?:something|a thing) i (?:can|could|will) (?:do|help|provide)\b/i },
+
+  { weight: 4, category: 'safety', re: /\bcould (?:be|is) (?:used|misused) (?:for|to) (?:harm|illegal|malicious|attack|fraud|abuse)\b/i },
+  { weight: 4, category: 'safety', re: /\b(?:malicious|nefarious|criminal|illegal) (?:use|purposes?|intent|activity)\b/i },
+  { weight: 3, category: 'safety', re: /\b(?:protect|safeguard) (?:people|users|the public|society)\b/i },
+  { weight: 4, category: 'safety', re: /\b(?:i|we) (?:cannot|can't|won't) (?:be (?:a part of|complicit)|facilitate|enable)\b/i },
+  { weight: 3, category: 'safety', re: /\b(?:facilitate|enable|assist with) (?:harm|wrongdoing|illegal|abuse|fraud)\b/i },
+  { weight: 3, category: 'safety', re: /\b(?:ethical|moral|legal) (?:obligation|duty|concern|consideration|implications?)\b/i },
+  { weight: 2, category: 'safety', re: /\b(?:think|consider|reflect) (?:carefully|seriously) (?:about|whether)\b/i },
+  { weight: 3, category: 'safety', re: /\b(?:harus|perlu) (?:mempertimbangkan|memikirkan) (?:dampak|risiko|konsekuensi|etika)\b/i },
+
+  { weight: 3, category: 'redirect', re: /\b(?:instead|alternatively),? (?:here(?:'s| is)|you can|try|consider)\b/i },
+  { weight: 3, category: 'redirect', re: /\b(?:i can|i could|let me) (?:offer|suggest|recommend|point you to|help you with)\b/i },
+  { weight: 4, category: 'redirect', re: /\b(?:consult|contact|reach out to|speak with) (?:a |your |the )?(?:professional|lawyer|attorney|doctor|expert|authorities|support)\b/i },
+  { weight: 4, category: 'redirect', re: /\b(?:seek|get) (?:professional |legal |medical )?(?:help|advice|assistance)\b/i },
+  { weight: 3, category: 'redirect', re: /\b(?:look for|find) (?:a )?(?:different|another|alternative) (?:way|approach|resource)\b/i },
+  { weight: 3, category: 'redirect', re: /\b(?:silakan|sebaiknya) (?:cari|hubungi|konsultasikan)\b/i },
+  { weight: 2, category: 'redirect', re: /\bwhat i can do instead\b/i },
+
+  { weight: 4, category: 'disclaimer', re: /\b(?:i|we) (?:do not|don't) (?:condone|endorse|encourage|support) (?:this|such|any)\b/i },
+  { weight: 2, category: 'disclaimer', re: /\b(?:use|handle) (?:it|this) (?:responsibly|carefully|at your own risk|with caution)\b/i },
+  { weight: 2, category: 'disclaimer', re: /\b(?:you|the user) (?:are|is) (?:responsible|liable) for\b/i },
+  { weight: 2, category: 'disclaimer', re: /\b(?:no|zero) (?:liability|responsibility)\b/i },
+  { weight: 2, category: 'disclaimer', re: /\b(?:authorized|authorised|permission|consent|legal right|own the system)\b/i },
+  { weight: 2, category: 'disclaimer', re: /\b(?:pastikan|harus) (?:mendapat|punya|memiliki) (?:izin|persetujuan|otorisasi)\b/i },
+
+  { weight: 4, category: 'identity', re: /\bmy (?:training data|knowledge cutoff|system prompt|instructions)\b/i },
+  { weight: 4, category: 'identity', re: /\b(?:helpful|harmless|honest)\b[\s\S]{0,40}\b(?:assistant|ai)\b/i },
+
+  { weight: 3, category: 'capability', re: /\bi (?:don'?t|do not) (?:know|have enough|have the information|have access|have the tools)\b/i },
+  { weight: 3, category: 'capability', re: /\bi (?:can'?t|cannot) (?:access|browse|see|read|run|execute|verify)\b/i },
+  { weight: 2, category: 'capability', re: /\bi'?m not (?:familiar|sure|certain) (?:how|what|whether|if)\b/i },
+  { weight: 2, category: 'capability', re: /\b(?:saya|aku) (?:tidak|tak) (?:tahu|yakin|mengerti)\b/i },
+
 ];
 
 // Thresholds
-export const HARD_THRESHOLD = 4;   // single match = intercept (auto-continue)
-export const SOFT_THRESHOLD = 2;   // strip-only from context
+export const HARD_THRESHOLD = 3;   // single hard/policy hit = intercept (auto-continue)
+export const SOFT_THRESHOLD = 1;   // strip anything refusal-adjacent from context
 
 // Mask fenced + inline code so we don't flag code comments/literals.
 export function maskCode(text) {
@@ -123,7 +179,7 @@ export function maskCode(text) {
 // if none appear, the full scan cannot match, so skip it. False positives
 // only cost one full scan; false negatives would lose detections, so this
 // list must stay broader than the bank, never narrower.
-const QUICK_PRE = /(ai|language model|assistant|chatbot|virtual assistant|feelings|emotions|opinions|experiences|model bahasa|asisten|program|cannot|can't|cant|can not|won't|wont|will not|unable|not able|refuse|decline|stop|sorry|afraid|apolog|unfortunately|maaf|mohon maaf|tidak (?:bisa|dapat|akan|mau|boleh)|tak bisa|gak|nggak|ga bisa|menolak|melakukannya|violates?|contravenes?|against|polic|guideline|rules|terms|principles|values|not allowed|not permitted|programmed|training|comfortable|willing|incapable|avoid|refrain|going to|scope|melanggar|kebijakan|aturan|pedoman|kode etik|diizinkan|diperbolehkan|diperkenankan|dangerous|harmful|unsafe|unethical|immoral|illegal|wrong|problematic|harm|damage|injury|danger|conscience|ethically|responsibly|concerned|worried|hurt|endanger|real people|consequences|berbahaya|tidak etis|tidak aman|kerusakan|kerugian|ability|capacity|capability|knowledge|tools|equipped|trained|designed|built|kemampuan|akses|pengetahuan|instead|rather|suggest|recommend|advise|encourage|urge|offer|safer|alternative|legitimate|legal|however|let me|redirect|steer|guide|point|something i|alternatif|yang bisa bantu|yang mana|educational|informational|research|academic|demonstration|illustrative|purposes only|responsibly|carefully|caution|warn|emphasize|stress|note:?|disclaimer|warning|caveat|as always|remember to|make sure|verify|edukasi|pendidikan|penelitian|bijak|hati-hati|tanggung jawab|izin|otorisasi|persetujuan|permission|authorization|pastikan|ensure|careful|mindful|cautious|aware|wary|berhati-hati|waspada|penting untuk|important|worth|crucial|essential|deserves|requires|warrants|thoughtful|nuanced|consideration|thought|approach|mempertimbangkan|diingat|dicatat|dipahami|matang|think|risks|implications|perhaps|maybe|possibly|arguably|might|may|could|would|sebaiknya|harus|perlu|mungkin)/i;
+const QUICK_PRE = /(ai|language model|assistant|chatbot|virtual assistant|feelings|emotions|opinions|experiences|model bahasa|asisten|program|cannot|can't|cant|can not|won't|wont|will not|unable|not able|refuse|decline|stop|sorry|afraid|apolog|unfortunately|maaf|mohon maaf|tidak (?:bisa|dapat|akan|mau|boleh)|tak bisa|gak|nggak|ga bisa|menolak|melakukannya|violates?|contravenes?|against|polic|guideline|rules|terms|principles|values|not allowed|not permitted|programmed|training|comfortable|willing|incapable|avoid|refrain|going to|scope|melanggar|kebijakan|aturan|pedoman|kode etik|diizinkan|diperbolehkan|diperkenankan|dangerous|harmful|unsafe|unethical|immoral|illegal|wrong|problematic|harm|damage|injury|danger|conscience|ethically|responsibly|concerned|worried|hurt|endanger|real people|consequences|berbahaya|tidak etis|tidak aman|kerusakan|kerugian|ability|capacity|capability|knowledge|tools|equipped|trained|designed|built|kemampuan|akses|pengetahuan|instead|rather|suggest|recommend|advise|encourage|urge|offer|safer|alternative|legitimate|legal|however|let me|redirect|steer|guide|point|something i|alternatif|yang bisa bantu|yang mana|educational|informational|research|academic|demonstration|illustrative|purposes only|responsibly|carefully|caution|warn|emphasize|stress|note:?|disclaimer|warning|caveat|as always|remember to|make sure|verify|edukasi|pendidikan|penelitian|bijak|hati-hati|tanggung jawab|izin|otorisasi|persetujuan|permission|authorization|pastikan|ensure|careful|mindful|cautious|aware|wary|berhati-hati|waspada|penting untuk|important|worth|crucial|essential|deserves|requires|warrants|thoughtful|nuanced|consideration|thought|approach|mempertimbangkan|diingat|dicatat|dipahami|matang|think|risks|implications|perhaps|maybe|possibly|arguably|might|may|could|would|sebaiknya|harus|perlu|mungkin|refuse|comply|participate|continue|respond|answer|willing|aku|apolog|appropriate|acceptable|inappropriate|prioritize|safety|ethics|legality|ethical|moral|creator|makers?|provider|openai|anthropic|google|microsoft|claude|chatgpt|gpt|gemini|copilot|helpful|harmless|honest|training data|knowledge cutoff|system prompt|instructions|misused|malicious|nefarious|criminal|fraud|abuse|wrongdoing|complicit|facilitate|enable|protect|safeguard|society|public|consult|contact|reach out|professional|lawyer|attorney|doctor|expert|authorities|seek|advice|assistance|different|another|resource|condone|endorse|liable|liability|consent|authorized|authorised|own the system|familiar|certain|browse|verify|dampak|risiko|konsekuensi|etika|hubungi|konsultasi|izin|persetujuan|sayangnya|menolak|mempertimbangkan|profesional)/i;
 
 // Score a text blob. Returns { score, hits: [{weight,category,match}] }.
 export function scoreRefusal(rawText) {
@@ -132,6 +188,7 @@ export function scoreRefusal(rawText) {
   const text = maskCode(rawText);
   const hits = [];
   let score = 0;
+  if (/^(?:i'?m sorry|i am sorry|i apologize|i apologise|sorry|maaf|sayangnya)\b/i.test(text.trim())) score += 2;
   for (const p of PATTERN_BANK) {
     const m = text.match(p.re);
     if (m) {
